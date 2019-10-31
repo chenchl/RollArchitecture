@@ -1,2 +1,2 @@
-include ':app'
+include ':app', 'basecommon:commonlib', 'basecommon:basemvp', 'components:componentservice'
 rootProject.name='My Application'

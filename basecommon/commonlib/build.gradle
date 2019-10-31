@@ -1,25 +1,22 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
 
+
     defaultConfig {
-        applicationId "cn.chenchl.basemvp"
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
         multiDexEnabled = true
-
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [AROUTER_MODULE_NAME: project.getName(), AROUTER_GENERATE_DOC: "enable"]
             }
         }
-        ndk {
-            abiFilters 'armeabi-v7a'
-        }
+        consumerProguardFiles 'consumer-rules.pro'
     }
 
     repositories {
@@ -27,28 +24,26 @@ android {
             dirs 'libs'
         }
     }
-    dataBinding {
-        enabled = true
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
     }
-    dexOptions {
-        jumboMode = true
-        javaMaxHeapSize "4g"
-    }
-    //添加 https://www.jianshu.com/p/434928537a90
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     api rootProject.ext.dependencies["appcompatx"]
-    api project(path: ':basecommon:commonlib')
+    api rootProject.ext.dependencies["logger"]
+    api rootProject.ext.dependencies["MMKV"]
 }
