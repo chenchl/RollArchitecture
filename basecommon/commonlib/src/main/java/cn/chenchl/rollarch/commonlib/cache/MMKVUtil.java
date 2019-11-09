@@ -1,3 +1,4 @@
+/*
 package cn.chenchl.rollarch.commonlib.cache;
 
 import android.content.Context;
@@ -8,40 +9,48 @@ import com.tencent.mmkv.MMKV;
 
 import cn.chenchl.rollarch.commonlib.log.LogUtil;
 
+*/
 /**
  * created by ccl on 2019/2/14
- **/
+ **//*
+
 public class MMKVUtil {
     private static final String TAG = MMKVUtil.class.getSimpleName();
 
-    /**
+    */
+/**
      * MMKV初始化
      *
      * @param context 默认为file/mmkv
-     */
+     *//*
+
     public static void initMMKV(Context context) {
         String rootDir = MMKV.initialize(context);
         LogUtil.i(TAG, "mmkv root: " + rootDir);
     }
 
-    /**
+    */
+/**
      * MMKV初始化
      *
      * @param dir 自定义存储路径
-     */
+     *//*
+
     public static void initMMKV(String dir) {
         String rootDir = MMKV.initialize(dir);
         LogUtil.i(TAG, "mmkv root: " + rootDir);
     }
 
-    /**
+    */
+/**
      * 存储数据
      *
      * @param mmapID
      * @param mode
      * @param key
      * @param value
-     */
+     *//*
+
     public static void set(String mmapID, int mode, String key, Object value) {
         MMKV kv = MMKV.mmkvWithID(mmapID, mode);
         boolean result = false;
@@ -65,23 +74,27 @@ public class MMKVUtil {
         LogUtil.i(TAG, "mmkv " + mmapID + " set :" + key + " " + value + " result = " + result);
     }
 
-    /**
+    */
+/**
      * 存储数据
      *
      * @param mmapID
      * @param key
      * @param value
-     */
+     *//*
+
     public static void set(String mmapID, String key, Object value) {
         set(mmapID, Context.MODE_PRIVATE, key, value);
     }
 
-    /**
+    */
+/**
      * 存储数据
      *
      * @param key
      * @param value
-     */
+     *//*
+
     public static void set(String key, Object value) {
         MMKV kv = MMKV.defaultMMKV();
         boolean result = false;
@@ -105,7 +118,8 @@ public class MMKVUtil {
         LogUtil.i(TAG, "mmkv set :" + key + " " + value + " result = " + result);
     }
 
-    /**
+    */
+/**
      * 获取数据
      *
      * @param mmapID
@@ -114,7 +128,8 @@ public class MMKVUtil {
      * @param defValue
      * @param <T>
      * @return
-     */
+     *//*
+
     public static <T> T get(String mmapID, int mode, String key, T defValue) {
         MMKV kv = MMKV.mmkvWithID(mmapID, mode);
         Object result = null;
@@ -139,7 +154,8 @@ public class MMKVUtil {
         return (T) result;
     }
 
-    /**
+    */
+/**
      * 获取数据
      *
      * @param mmapID
@@ -147,19 +163,22 @@ public class MMKVUtil {
      * @param defValue
      * @param <T>
      * @return
-     */
+     *//*
+
     public static <T> T get(String mmapID, String key, T defValue) {
         return get(mmapID, Context.MODE_PRIVATE, key, defValue);
     }
 
-    /**
+    */
+/**
      * 获取数据
      *
      * @param key
      * @param defValue
      * @param <T>
      * @return
-     */
+     *//*
+
     public static <T> T get(String key, T defValue) {
         MMKV kv = MMKV.defaultMMKV();
         Object result = null;
@@ -184,45 +203,53 @@ public class MMKVUtil {
         return (T) result;
     }
 
-    /**
+    */
+/**
      * 删除指定key的数据
      *
      * @param mmapID
      * @param mode
      * @param key
-     */
+     *//*
+
     public static void remove(String mmapID, int mode, String key) {
         MMKV kv = MMKV.mmkvWithID(mmapID, mode);
         kv.removeValueForKey(key);
         LogUtil.i(TAG, "mmkv " + mmapID + " remove :" + key);
     }
 
-    /**
+    */
+/**
      * 删除指定key的数据
      *
      * @param mmapID
      * @param key
-     */
+     *//*
+
     public static void remove(String mmapID, String key) {
         remove(mmapID, Context.MODE_PRIVATE, key);
     }
 
-    /**
+    */
+/**
      * 删除指定key的数据
      *
      * @param key
-     */
+     *//*
+
     public static void remove(String key) {
         MMKV kv = MMKV.defaultMMKV();
         kv.removeValueForKey(key);
         LogUtil.i(TAG, "mmkv remove :" + key);
     }
 
-    /**
+    */
+/**
      * 删除全部的数据
      *
      * @param mmapID
-     */
+     *//*
+
     public static void clearAllDef(String mmapID) {
         MMKV kv = MMKV.mmkvWithID(mmapID, Context.MODE_PRIVATE);
         kv.clearAll();
@@ -230,20 +257,25 @@ public class MMKVUtil {
     }
 
 
-    /**
+    */
+/**
      * 删除指定key的数据
-     */
+     *//*
+
     public static void clearAllDef() {
         MMKV kv = MMKV.defaultMMKV();
         kv.clearAll();
         LogUtil.i(TAG, "mmkv clearAll");
     }
 
-    /**
+    */
+/**
      * 老数据迁移
      *
      * @param context
      *//*
+*/
+/*
     public static void importSharedPreferencesData(final Context context) {
         new Thread(new Runnable() {
             @Override
@@ -271,36 +303,44 @@ public class MMKVUtil {
                 }
             }
         }).start();
-    }*/
+    }*//*
 
-    /**
+
+    */
+/**
      * 获取mmkv实例
      *
      * @param spType
      * @return
-     */
+     *//*
+
     public static MMKV getSharedPreferences(SPType spType) {
         return MMKV.mmkvWithID(spType.getKey(), spType.getMode());
     }
 
-    /**
+    */
+/**
      * 获取mmkv editor实例
      *
      * @param spType
      * @return
-     */
+     *//*
+
     public static SharedPreferences.Editor getEditor(SPType spType) {
         return MMKV.mmkvWithID(spType.getKey(), spType.getMode()).edit();
     }
 
-    /**
+    */
+/**
      * 根据内容取得sp实例
      *
      * @param spType
      * @return
-     */
+     *//*
+
     private static SharedPreferences getSharedPreferences(Context context, SPType spType) {
         return context.getSharedPreferences(spType.getKey(),
                 spType.getMode());
     }
 }
+*/
