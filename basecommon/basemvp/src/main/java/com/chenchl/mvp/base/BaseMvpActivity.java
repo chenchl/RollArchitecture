@@ -1,7 +1,6 @@
 package com.chenchl.mvp.base;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 
 import com.chenchl.mvp.interfaces.ActivityFragmentInter;
 
@@ -19,9 +18,9 @@ public abstract class BaseMvpActivity extends AppCompatActivity implements Activ
     private Unbinder unbinder;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         initBefore();
-        super.onCreate(savedInstanceState, persistentState);
+        super.onCreate(savedInstanceState);
         setContentView(setXMLView());
         unbinder = ButterKnife.bind(this);
         initView();
