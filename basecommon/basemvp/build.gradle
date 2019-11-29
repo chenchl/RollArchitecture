@@ -44,4 +44,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     api rootProject.ext.dependencies["appcompatx"]
+    api project(path: ':basecommon:commonlib')
+    api rootProject.ext.dependencies["butterKnife"]
+    annotationProcessor rootProject.ext.dependencies["butterKnife-compiler"]
 }

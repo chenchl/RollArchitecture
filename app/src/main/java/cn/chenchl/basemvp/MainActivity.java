@@ -1,27 +1,27 @@
 package cn.chenchl.basemvp;
 
-import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.chenchl.mvp.base.BaseMvpActivity;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import androidx.appcompat.app.AppCompatActivity;
+import butterknife.BindView;
 
-public class MainActivity extends AppCompatActivity implements MainContract.View {
-
-
-    private TextView tvText;
+public class MainActivity extends BaseMvpActivity implements MainContract.View {
+    @BindView(R.id.tv1)
+    TextView tv1;
+    @BindView(R.id.tv_text)
+    TextView tvText;
     private MainPresenter mainPresenter;
 
-    @Override
+    /*@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tvText = findViewById(R.id.tv_text);
-        /*ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
         TestProxy testProxy = str -> System.out.println("sdad " + str);
         TestProxyHandler testProxyHandler = new TestProxyHandler(testProxy);
@@ -30,7 +30,31 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         Disposable haha = Flowable.timer(1, TimeUnit.MINUTES)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aLong -> Toast.makeText(MainActivity.this, "haha", Toast.LENGTH_SHORT).show());
-        haha.dispose();*/
+        haha.dispose();
+
+    }*/
+
+    @Override
+    public void setText(String text) {
+        tvText.setText(text);
+    }
+
+    @Override
+    public void initBefore() {
+
+    }
+
+    @Override
+    public int setXMLView() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    public void initView() {
+    }
+
+    @Override
+    public void initdata() {
         mainPresenter = new MainPresenter();
         mainPresenter.attchView(this);
         mainPresenter.init(tvText.getText().toString());
@@ -43,19 +67,18 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void showToast(String s) {
-        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void destoryP() {
         mainPresenter.detchView();
     }
 
     @Override
-    public void setText(String text) {
-        tvText.setText(text);
+    public void refresh() {
+
+    }
+
+    @Override
+    public String setTag() {
+        return "主页";
     }
 
     class TestProxyHandler implements InvocationHandler {

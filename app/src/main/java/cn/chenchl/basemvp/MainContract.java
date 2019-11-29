@@ -1,6 +1,6 @@
 package cn.chenchl.basemvp;
 
-import com.chenchl.mvp.IView;
+import com.chenchl.mvp.interfaces.IView;
 
 import androidx.annotation.UiThread;
 

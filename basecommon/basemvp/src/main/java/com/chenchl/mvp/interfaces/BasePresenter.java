@@ -1,4 +1,9 @@
-package com.chenchl.mvp;
+package com.chenchl.mvp.interfaces;
+
+import android.app.Activity;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
 
 /**
  * created by hasee on 2019/11/27
@@ -6,20 +11,30 @@ package com.chenchl.mvp;
 public abstract class BasePresenter<V extends IView> implements IPresenter<V> {
 
     protected V mView;
+    protected LifecycleOwner mlifeCycleOwner;
 
     @Override
     public void attchView(V view) {
         this.mView = view;
+        if (view instanceof Activity || view instanceof Fragment) {//针对activity和fragment自动设置autodispose
+            setlifeCycleOwner((LifecycleOwner) view);
+        }
     }
 
     @Override
     public void detchView() {
         this.mView = null;
+        mlifeCycleOwner = null;
         destory();
     }
 
     @Override
     public abstract void destory();
+
+    @Override
+    public void setlifeCycleOwner(LifecycleOwner mlifeCycleOwner) {
+        this.mlifeCycleOwner = mlifeCycleOwner;
+    }
 
     /**
      * View是否绑定
