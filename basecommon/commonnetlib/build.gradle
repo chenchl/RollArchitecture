@@ -43,12 +43,5 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    api rootProject.ext.dependencies["appcompatx"]
-    api rootProject.ext.dependencies["logger"]
-    api rootProject.ext.dependencies["MMKV"]
-    api rootProject.ext.httpDependencies["rxjava"]
-    api rootProject.ext.httpDependencies["rxandroid"]
-    api rootProject.ext.dependencies["autoDispose"]
-    api rootProject.ext.dependencies["autoDisposeArchcomponents"]
+    api project(path: ':basecommon:commonlib')
 }
