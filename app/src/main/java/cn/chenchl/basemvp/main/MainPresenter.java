@@ -1,15 +1,8 @@
-package cn.chenchl.basemvp;
+package cn.chenchl.basemvp.main;
 
 import com.chenchl.mvp.interfaces.BasePresenter;
 
-import java.util.concurrent.TimeUnit;
-
-import androidx.lifecycle.Lifecycle;
-import cn.chenchl.rollarch.commonlib.rxjava.RxJavaTransformers;
-import cn.chenchl.rollarch.commonlib.rxjava.RxLifecycleUtil;
-import io.reactivex.Flowable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
+import cn.chenchl.rollarch.commonlib.widget.ToastUtil;
 
 /**
  * created by hasee on 2019/11/27
@@ -20,19 +13,26 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
     private MainModel mainModel;
 
     @Override
-    public void destory() {
-
+    public void init() {
+        mainModel = new MainModel(this);
     }
 
     @Override
-    public void init(String s) {
+    public void destory() {
+        mainModel = null;
+    }
+
+    public MainPresenter() {
+    }
+
+    @Override
+    public void initData(String s) {
         title = s;
-        mainModel = new MainModel();
     }
 
     @Override
     public void doSomething() {
-        Flowable.timer(3000, TimeUnit.MILLISECONDS)
+        /*Flowable.timer(3000, TimeUnit.MILLISECONDS)
                 .compose(RxJavaTransformers.getDefaultScheduler())
                 .map(new Function<Long, String>() {
                     @Override
@@ -48,6 +48,12 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
                         getV().setText(title);
                         getV().showToast("166666");
                     }
-                });
+                });*/
+        mainModel.login("xlm", "9999s99");
+    }
+
+    @Override
+    public void showResult(String str) {
+        ToastUtil.showShort(str);
     }
 }

@@ -1,4 +1,4 @@
-package cn.chenchl.basemvp;
+package cn.chenchl.basemvp.main;
 
 import com.chenchl.mvp.interfaces.IView;
 
@@ -11,12 +11,16 @@ public interface MainContract {
 
     interface Model {
         String getText(String name);
+
+        void login(String userName, String password);
     }
 
     interface Presenter {
-        void init(String s);
+        void initData(String s);
 
         void doSomething();
+
+        void showResult(String str);
     }
 
     interface View extends IView<Presenter> {

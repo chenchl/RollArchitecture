@@ -44,4 +44,10 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api project(path: ':basecommon:commonlib')
+    api rootProject.ext.httpDependencies["retrofit"]
+    api rootProject.ext.httpDependencies["converter-scalars"]
+    api rootProject.ext.httpDependencies["converter-gson"]
+    api rootProject.ext.httpDependencies["adapter-rxjava2"]
+    api rootProject.ext.httpDependencies["okhttp"]
+    api rootProject.ext.httpDependencies["okio"]
 }

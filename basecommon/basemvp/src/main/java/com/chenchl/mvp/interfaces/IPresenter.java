@@ -18,6 +18,8 @@ public interface IPresenter<V> {
 
     void setlifeCycleOwner(LifecycleOwner mlifeCycleOwner);
 
+    void init();
+
     void destory();
 
     V getV();

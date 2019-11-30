@@ -19,6 +19,7 @@ public abstract class BasePresenter<V extends IView> implements IPresenter<V> {
         if (view instanceof Activity || view instanceof Fragment) {//针对activity和fragment自动设置autodispose
             setlifeCycleOwner((LifecycleOwner) view);
         }
+        init();
     }
 
     @Override
@@ -34,6 +35,10 @@ public abstract class BasePresenter<V extends IView> implements IPresenter<V> {
     @Override
     public void setlifeCycleOwner(LifecycleOwner mlifeCycleOwner) {
         this.mlifeCycleOwner = mlifeCycleOwner;
+    }
+
+    public LifecycleOwner getlifeCycleOwner() {
+        return mlifeCycleOwner;
     }
 
     /**

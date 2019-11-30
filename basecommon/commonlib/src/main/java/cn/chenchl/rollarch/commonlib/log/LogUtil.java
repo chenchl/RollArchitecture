@@ -20,7 +20,7 @@ import cn.chenchl.rollarch.commonlib.Utils;
  **/
 public class LogUtil {
 
-    public static boolean isDebug = getIsLogEnable(Utils.getApp()); // LOG开关
+    public static boolean isDebug = true; // LOG开关
 
     private static boolean getIsLogEnable(Context context) {
         ApplicationInfo appInfo = null;

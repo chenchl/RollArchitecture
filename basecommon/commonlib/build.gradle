@@ -49,6 +49,7 @@ dependencies {
     api rootProject.ext.dependencies["MMKV"]
     api rootProject.ext.httpDependencies["rxjava"]
     api rootProject.ext.httpDependencies["rxandroid"]
+    api rootProject.ext.dependencies["gson"]
     api rootProject.ext.dependencies["autoDispose"]
     api rootProject.ext.dependencies["autoDisposeArchcomponents"]
 }

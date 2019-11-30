@@ -1,14 +1,26 @@
-package cn.chenchl.basemvp;
+package cn.chenchl.basemvp.main;
 
 import android.view.View;
 import android.widget.TextView;
 
+import com.chenchl.common.net.retrofit.NetError;
+import com.chenchl.common.net.retrofit.NetProvider;
+import com.chenchl.common.net.retrofit.RetrofitUtil;
 import com.chenchl.mvp.base.BaseMvpActivity;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
+
 import butterknife.BindView;
+import cn.chenchl.basemvp.R;
+import cn.chenchl.rollarch.commonlib.Utils;
+import cn.chenchl.rollarch.commonlib.log.LogUtil;
+import okhttp3.CookieJar;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
 
 public class MainActivity extends BaseMvpActivity implements MainContract.View {
     @BindView(R.id.tv1)
@@ -41,7 +53,53 @@ public class MainActivity extends BaseMvpActivity implements MainContract.View {
 
     @Override
     public void initBefore() {
+        LogUtil.init(Utils.getApp());
+        RetrofitUtil.registerProvider(new NetProvider() {
+            @Override
+            public Interceptor[] configInterceptors() {
+                return new Interceptor[0];
+            }
 
+            @Override
+            public void configHttps(OkHttpClient.Builder builder) {
+                builder.hostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                });
+            }
+
+            @Override
+            public CookieJar configCookie() {
+                return null;
+            }
+
+            @Override
+            public long configConnectTimeoutMills() {
+                return 0;
+            }
+
+            @Override
+            public long configReadTimeoutMills() {
+                return 0;
+            }
+
+            @Override
+            public long configWriteTimeoutMills() {
+                return 0;
+            }
+
+            @Override
+            public boolean configLogEnable() {
+                return true;
+            }
+
+            @Override
+            public boolean handleError(NetError error) {
+                return false;
+            }
+        });
     }
 
     @Override
@@ -57,7 +115,6 @@ public class MainActivity extends BaseMvpActivity implements MainContract.View {
     public void initdata() {
         mainPresenter = new MainPresenter();
         mainPresenter.attchView(this);
-        mainPresenter.init(tvText.getText().toString());
         tvText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
