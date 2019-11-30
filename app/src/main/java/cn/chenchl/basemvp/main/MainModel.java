@@ -1,9 +1,6 @@
 package cn.chenchl.basemvp.main;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Build;
-import android.telephony.TelephonyManager;
 
 import com.chenchl.common.net.retrofit.DefaultResponseSubscriber;
 import com.chenchl.common.net.retrofit.NetError;
@@ -15,7 +12,6 @@ import org.json.JSONObject;
 import androidx.lifecycle.Lifecycle;
 import cn.chenchl.basemvp.main.bean.LoginBean;
 import cn.chenchl.basemvp.net.MainApi;
-import cn.chenchl.rollarch.commonlib.Utils;
 import cn.chenchl.rollarch.commonlib.codec.MD5Utils;
 import cn.chenchl.rollarch.commonlib.rxjava.RxJavaTransformers;
 import cn.chenchl.rollarch.commonlib.rxjava.RxLifecycleUtil;
@@ -33,15 +29,7 @@ public class MainModel extends BaseModel<MainPresenter> implements MainContract.
     }
 
     @Override
-    public String getText(String name) {
-        return name + "@123";
-    }
-
-    @SuppressLint("MissingPermission")
-    @Override
     public void login(String userName, String password) {
-        MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
-        TelephonyManager telephonyManager = (TelephonyManager) Utils.getApp().getSystemService(Context.TELEPHONY_SERVICE);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("loginName", userName);

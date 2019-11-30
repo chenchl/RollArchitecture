@@ -10,13 +10,10 @@ import androidx.annotation.UiThread;
 public interface MainContract {
 
     interface Model {
-        String getText(String name);
-
         void login(String userName, String password);
     }
 
     interface Presenter {
-        void initData(String s);
 
         void doSomething();
 
