@@ -17,6 +17,7 @@ import javax.net.ssl.SSLSession;
 import butterknife.BindView;
 import cn.chenchl.basemvp.R;
 import cn.chenchl.rollarch.commonlib.Utils;
+import cn.chenchl.rollarch.commonlib.cache.LocalDataProxy;
 import cn.chenchl.rollarch.commonlib.log.LogUtil;
 import okhttp3.CookieJar;
 import okhttp3.Interceptor;
@@ -100,6 +101,7 @@ public class MainActivity extends BaseMvpActivity implements MainContract.View {
                 return false;
             }
         });
+        LocalDataProxy.getInstance().initCache(getApplicationContext());
     }
 
     @Override

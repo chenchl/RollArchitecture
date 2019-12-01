@@ -50,7 +50,7 @@ public class MemoryCookieStore implements CookieStore {
         } else {
             allCookies.put(uri.host(), newCookies);
         }
-        /*List<Cookie> cookies = allCookies.get(uri.host());
+        /*List<Cookie> cookies = allCookies.getInternal(uri.host());
         if (cookies == null)
         {
             cookies = new ArrayList<>();

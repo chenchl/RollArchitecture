@@ -442,7 +442,7 @@ public final class ToastUtil {
             } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) {
                 Context topActivityOrApp = Utils.getTopActivityOrApp();
                 if (!(topActivityOrApp instanceof Activity)) {
-                    Log.e("ToastUtils", "Couldn't get top Activity.");
+                    Log.e("ToastUtils", "Couldn't getInternal top Activity.");
                     return;
                 }
                 Activity topActivity = (Activity) topActivityOrApp;
