@@ -224,7 +224,8 @@ public class RetrofitUtil {
                             return Flowable.error(new NetError(model.getErrorMsg(), NetError.BusinessError));
                         }*/
                     }
-                });
+                }).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
             }
         };
     }

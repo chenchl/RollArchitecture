@@ -11,7 +11,7 @@ import cn.chenchl.rollarch.commonlib.log.LogUtil;
  * created by hasee on 2019/12/1
  **/
 public class SPUtil implements ICache {
-    private static final String TAG = MMKVUtil.class.getSimpleName();
+    private static final String TAG = SPUtil.class.getSimpleName();
     private static final String SP_NAME = "sp_data";
     private SharedPreferences sharedPreferences;
 

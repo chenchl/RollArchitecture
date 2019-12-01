@@ -18,6 +18,7 @@ import butterknife.BindView;
 import cn.chenchl.basemvp.R;
 import cn.chenchl.rollarch.commonlib.Utils;
 import cn.chenchl.rollarch.commonlib.cache.LocalDataProxy;
+import cn.chenchl.rollarch.commonlib.cache.SPUtil;
 import cn.chenchl.rollarch.commonlib.log.LogUtil;
 import okhttp3.CookieJar;
 import okhttp3.Interceptor;
@@ -101,7 +102,8 @@ public class MainActivity extends BaseMvpActivity implements MainContract.View {
                 return false;
             }
         });
-        LocalDataProxy.getInstance().initCache(getApplicationContext());
+        //LocalDataProxy.getInstance().initCache(getApplicationContext());
+        LocalDataProxy.getInstance().initCache(SPUtil.getInstance(),getApplicationContext());
     }
 
     @Override
@@ -123,6 +125,7 @@ public class MainActivity extends BaseMvpActivity implements MainContract.View {
                 mainPresenter.doSomething();
             }
         });
+        tvText.setText(LocalDataProxy.getInstance().get("logindata","no login"));
     }
 
     @Override

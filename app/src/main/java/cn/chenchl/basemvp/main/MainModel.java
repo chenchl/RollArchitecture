@@ -13,7 +13,6 @@ import androidx.lifecycle.Lifecycle;
 import cn.chenchl.basemvp.main.bean.LoginBean;
 import cn.chenchl.basemvp.net.MainApi;
 import cn.chenchl.rollarch.commonlib.codec.MD5Utils;
-import cn.chenchl.rollarch.commonlib.rxjava.RxJavaTransformers;
 import cn.chenchl.rollarch.commonlib.rxjava.RxLifecycleUtil;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -47,7 +46,7 @@ public class MainModel extends BaseModel<MainPresenter> implements MainContract.
         MainApi.getMainNetService()
                 .login(requestBody)
                 .compose(RetrofitUtil.getDefaultTransformer())
-                .compose(RxJavaTransformers.getDefaultScheduler())
+                //.compose(RxJavaTransformers.getDefaultScheduler())
                 .as(RxLifecycleUtil.bindLifeCycle(getP().getlifeCycleOwner(), Lifecycle.Event.ON_PAUSE))
                 .subscribe(new DefaultResponseSubscriber<com.chenchl.common.net.bean.BaseModel<LoginBean>, LoginBean>() {
                     @Override
