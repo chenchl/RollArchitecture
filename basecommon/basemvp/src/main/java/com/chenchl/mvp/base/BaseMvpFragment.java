@@ -11,6 +11,8 @@ import com.chenchl.mvp.interfaces.ActivityFragmentInter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cn.chenchl.rollarch.commonlib.widget.ToastUtil;
 
 /**
@@ -19,6 +21,8 @@ import cn.chenchl.rollarch.commonlib.widget.ToastUtil;
 public abstract class BaseMvpFragment extends Fragment implements ActivityFragmentInter {
     private Context mContext;
     private View rootView;
+    private boolean isFirstCreate = true;
+    private Unbinder bind;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +60,12 @@ public abstract class BaseMvpFragment extends Fragment implements ActivityFragme
                 viewGroup.removeView(rootView);
             }
         }
+        bind = ButterKnife.bind(this, rootView);
+        if (isFirstCreate) {
+            isFirstCreate = false;
+            initView();
+            initdata();
+        }
         return rootView;
     }
 
@@ -63,6 +73,12 @@ public abstract class BaseMvpFragment extends Fragment implements ActivityFragme
     public void onResume() {
         super.onResume();
         refresh();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        bind.unbind();
     }
 
     @Override

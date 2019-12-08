@@ -4,22 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".main.MainActivity">
-
-    <TextView
-        android:id="@+id/tv1"
-
-        android:layout_width="@dimen/x52"
-        android:layout_height="@dimen/x52"
-        android:background="@android:color/holo_blue_bright"
-        android:text="@string/base_dpi_string"
-        android:textSize="@dimen/x685" />
 
     <TextView
         android:id="@+id/tv_text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/x100"
         android:layout_centerInParent="true"
         android:text="Hello World!" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/x100" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x100"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        app:itemIconSize="@dimen/x50"
+        app:itemTextAppearanceActive="@style/BottomNavigationView_Text_in"
+        app:itemTextAppearanceInactive="@style/BottomNavigationView_Text_out"
+        app:labelVisibilityMode="labeled"
+        app:itemHorizontalTranslationEnabled="false"
+        app:menu="@menu/menu_main" />
+
 
 </RelativeLayout>

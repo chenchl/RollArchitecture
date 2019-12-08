@@ -8,4 +8,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="BottomNavigationView_Text_in">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textSize">@dimen/x28</item>
+        <item name="android:textColor">@android:color/holo_blue_light</item>
+    </style>
+
+    <style name="BottomNavigationView_Text_out">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textSize">@dimen/x28</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
 </resources>

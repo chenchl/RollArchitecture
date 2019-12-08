@@ -1,52 +1,29 @@
 package cn.chenchl.basemvp.main;
 
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.chenchl.common.net.retrofit.NetError;
-import com.chenchl.common.net.retrofit.NetProvider;
-import com.chenchl.common.net.retrofit.RetrofitUtil;
 import com.chenchl.mvp.base.BaseMvpActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
-
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import cn.chenchl.basemvp.R;
-import cn.chenchl.rollarch.commonlib.Utils;
 import cn.chenchl.rollarch.commonlib.cache.LocalDataProxy;
-import cn.chenchl.rollarch.commonlib.cache.SPUtil;
-import cn.chenchl.rollarch.commonlib.log.LogUtil;
-import okhttp3.CookieJar;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
 
 public class MainActivity extends BaseMvpActivity implements MainContract.View {
-    @BindView(R.id.tv1)
-    TextView tv1;
     @BindView(R.id.tv_text)
     TextView tvText;
+    @BindView(R.id.viewpager)
+    ViewPager viewpager;
+    @BindView(R.id.bottom)
+    BottomNavigationView bottom;
+
     private MainPresenter mainPresenter;
-
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
-        TestProxy testProxy = str -> System.out.println("sdad " + str);
-        TestProxyHandler testProxyHandler = new TestProxyHandler(testProxy);
-        TestProxy o = (TestProxy) Proxy.newProxyInstance(testProxy.getClass().getClassLoader(), testProxy.getClass().getInterfaces(), testProxyHandler);
-        o.sayTest("123");
-        Disposable haha = Flowable.timer(1, TimeUnit.MINUTES)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(aLong -> Toast.makeText(MainActivity.this, "haha", Toast.LENGTH_SHORT).show());
-        haha.dispose();
-
-    }*/
 
     @Override
     public void setText(String text) {
@@ -55,55 +32,6 @@ public class MainActivity extends BaseMvpActivity implements MainContract.View {
 
     @Override
     public void initBefore() {
-        LogUtil.init(Utils.getApp());
-        RetrofitUtil.registerProvider(new NetProvider() {
-            @Override
-            public Interceptor[] configInterceptors() {
-                return new Interceptor[0];
-            }
-
-            @Override
-            public void configHttps(OkHttpClient.Builder builder) {
-                builder.hostnameVerifier(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String hostname, SSLSession session) {
-                        return true;
-                    }
-                });
-            }
-
-            @Override
-            public CookieJar configCookie() {
-                return null;
-            }
-
-            @Override
-            public long configConnectTimeoutMills() {
-                return 0;
-            }
-
-            @Override
-            public long configReadTimeoutMills() {
-                return 0;
-            }
-
-            @Override
-            public long configWriteTimeoutMills() {
-                return 0;
-            }
-
-            @Override
-            public boolean configLogEnable() {
-                return true;
-            }
-
-            @Override
-            public boolean handleError(NetError error) {
-                return false;
-            }
-        });
-        //LocalDataProxy.getInstance().initCache(getApplicationContext());
-        LocalDataProxy.getInstance().initCache(SPUtil.getInstance(),getApplicationContext());
     }
 
     @Override
@@ -125,7 +53,63 @@ public class MainActivity extends BaseMvpActivity implements MainContract.View {
                 mainPresenter.doSomething();
             }
         });
-        tvText.setText(LocalDataProxy.getInstance().get("logindata","no login"));
+        tvText.setText(LocalDataProxy.getInstance().get("logindata", "no login"));
+        viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                MenuItem item = bottom.getMenu().getItem(position);
+                item.setChecked(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        bottom.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.item_bottom_1:
+                        viewpager.setCurrentItem(0);
+                        break;
+                    case R.id.item_bottom_2:
+                        viewpager.setCurrentItem(1);
+                        break;
+                    case R.id.item_bottom_3:
+                        viewpager.setCurrentItem(2);
+                        break;
+                    case R.id.item_bottom_4:
+                        viewpager.setCurrentItem(3);
+                        break;
+                }
+                return false;
+            }
+        });
+        viewpager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+            Fragment[] fragments = new Fragment[]{
+                    new MainFragment(),
+                    new MainFragment(),
+                    new MainFragment(),
+                    new MainFragment()
+            };
+
+            @NonNull
+            @Override
+            public Fragment getItem(int position) {
+                return fragments[position];
+            }
+
+            @Override
+            public int getCount() {
+                return fragments.length;
+            }
+        });
     }
 
     @Override
@@ -143,17 +127,4 @@ public class MainActivity extends BaseMvpActivity implements MainContract.View {
         return "主页";
     }
 
-    class TestProxyHandler implements InvocationHandler {
-
-        private Object obj;
-
-        public TestProxyHandler(Object obj) {
-            this.obj = obj;
-        }
-
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            return method.invoke(obj, args);
-        }
-    }
 }

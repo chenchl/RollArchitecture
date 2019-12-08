@@ -224,6 +224,7 @@ public class SortTest {
             heapify(array, i, size, isDESC);
         }
     }
+
     private static void heapify(int[] array, int index, int size, boolean isDESC) {
         if (index < size) {
             int left = index * 2 + 1;//左子树节点
@@ -411,6 +412,25 @@ public class SortTest {
             linkedList.remove(index);//数到num的人移除
         }
         System.out.println("约瑟夫环 总数：" + total + " 数的数：" + num + " 最后一位的序号" + linkedList.get(0));
+    }
+
+    /**
+     * 镜像二叉树
+     *
+     * @param node
+     */
+    public static void mirror(BinaryTreeNode node) {
+        if (node == null)
+            return;
+
+        BinaryTreeNode temp;
+        temp = node.leftNode;
+        node.leftNode = node.rightNode;
+        node.leftNode = temp;
+
+        mirror(node.leftNode);
+        mirror(node.rightNode);
+
     }
 
 

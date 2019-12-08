@@ -49,7 +49,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api rootProject.ext.dependencies["appcompatx"]
     api project(path: ':basecommon:commonlib')
     api project(path: ':basecommon:commonnetlib')
     api project(path: ':basecommon:basemvp')

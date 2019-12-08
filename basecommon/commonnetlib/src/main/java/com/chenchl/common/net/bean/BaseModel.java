@@ -1,9 +1,11 @@
 package com.chenchl.common.net.bean;
 
+import java.io.Serializable;
+
 /**
  * created by hasee on 2019/11/30
  **/
-public class BaseModel<T> implements IModel {
+public class BaseModel<T> implements IModel, Serializable {
     private T data;
     private String msg;
     private int code;
