@@ -10,9 +10,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import cn.chenchl.basemvp.R;
+import cn.chenchl.rollarch.commonlib.NetWatchDog;
 import cn.chenchl.rollarch.commonlib.cache.LocalDataProxy;
 
 public class MainActivity extends BaseMvpActivity implements MainContract.View {
@@ -45,6 +47,12 @@ public class MainActivity extends BaseMvpActivity implements MainContract.View {
 
     @Override
     public void initdata() {
+        NetWatchDog.getInstance().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@NetWatchDog.NetState Integer integer) {
+
+            }
+        });
         mainPresenter = new MainPresenter();
         mainPresenter.attchView(this);
         tvText.setOnClickListener(new View.OnClickListener() {
