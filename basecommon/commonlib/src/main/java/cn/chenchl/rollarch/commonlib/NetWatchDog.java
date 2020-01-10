@@ -9,9 +9,15 @@ import android.net.NetworkInfo;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Map;
 
 import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import cn.chenchl.rollarch.commonlib.log.LogUtil;
 
 /**
@@ -93,6 +99,55 @@ public class NetWatchDog extends LiveData<Integer> {
         super.onInactive();
         try {
             Utils.getApp().unregisterReceiver(mReceiver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super Integer> observer) {
+        super.observe(owner, observer);
+        //hook防止第一次注册监听时数据倒灌
+        hook(observer);
+    }
+
+    private void hook(Observer<? super Integer> observer) {
+        Class<LiveData> liveDataClass = LiveData.class;
+        try {
+            //获取field private SafeIterableMap<Observer<T>, ObserverWrapper> mObservers
+            Field mObservers = liveDataClass.getDeclaredField("mObservers");
+            mObservers.setAccessible(true);
+            //获取SafeIterableMap集合mObservers
+            Object observers = mObservers.get(this);
+            Class<?> observersClass = observers.getClass();
+            //获取SafeIterableMap的get(Object obj)方法
+            Method methodGet = observersClass.getDeclaredMethod("get", Object.class);
+            methodGet.setAccessible(true);
+            //获取到observer在集合中对应的ObserverWrapper对象
+            Object objectWrapperEntry = methodGet.invoke(observers, observer);
+            Object objectWrapper = null;
+            if (objectWrapperEntry instanceof Map.Entry) {
+                objectWrapper = ((Map.Entry) objectWrapperEntry).getValue();
+            }
+            if (objectWrapper == null) {
+                throw new NullPointerException("ObserverWrapper can not be null");
+            }
+            //获取ObserverWrapper的Class对象  LifecycleBoundObserver extends ObserverWrapper
+            Class<?> wrapperClass = objectWrapper.getClass().getSuperclass();
+            //获取ObserverWrapper的field mLastVersion
+            Field mLastVersion = wrapperClass.getDeclaredField("mLastVersion");
+            mLastVersion.setAccessible(true);
+            //获取liveData的field mVersion
+            Field mVersion = liveDataClass.getDeclaredField("mVersion");
+            mVersion.setAccessible(true);
+            Object mV = mVersion.get(this);
+            //把当前ListData的mVersion赋值给 ObserverWrapper的field mLastVersion
+            mLastVersion.set(objectWrapper, mV);
+
+            mObservers.setAccessible(false);
+            methodGet.setAccessible(false);
+            mLastVersion.setAccessible(false);
+            mVersion.setAccessible(false);
         } catch (Exception e) {
             e.printStackTrace();
         }
