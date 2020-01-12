@@ -34,6 +34,8 @@ public class NetWatchDog extends LiveData<Integer> {
         int MOBILE = 2;
     }
 
+    private int currentNetState = NetState.NOCONTECTED;
+
     private IntentFilter intentFilter;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -54,17 +56,21 @@ public class NetWatchDog extends LiveData<Integer> {
                 if (mobileNetworkInfo != null) {
                     mobileState = mobileNetworkInfo.getState();
                 }
-
+                int netType = NetState.NOCONTECTED;
                 if (NetworkInfo.State.CONNECTED != wifiState && NetworkInfo.State.CONNECTED == mobileState) {
                     LogUtil.d("VideoNetWatchdog", "onWifiTo4G()");
-                    setValue(NetState.MOBILE);
+                    netType = NetState.MOBILE;
                 } else if (NetworkInfo.State.CONNECTED == wifiState && NetworkInfo.State.CONNECTED != mobileState) {
                     LogUtil.d("VideoNetWatchdog", "on4GToWifi()");
-                    setValue(NetState.WIFI);
+                    netType = NetState.WIFI;
                 } else if (NetworkInfo.State.CONNECTED != wifiState && NetworkInfo.State.CONNECTED != mobileState) {
                     LogUtil.d("VideoNetWatchdog", "onNetDisconnected()");
-                    setValue(NetState.NOCONTECTED);
+                    netType = NetState.NOCONTECTED;
                 }
+                if (netType != currentNetState) {//与当前记录的网络状态一致则不通知 防止重复通知
+                    setValue(netType);
+                }
+                currentNetState = netType;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -109,6 +115,8 @@ public class NetWatchDog extends LiveData<Integer> {
         super.observe(owner, observer);
         //hook防止第一次注册监听时数据倒灌
         hook(observer);
+        //主动获取一次网络状态 防止无效数据通知回调
+        getNetWorkType();
     }
 
     private void hook(Observer<? super Integer> observer) {
@@ -156,12 +164,11 @@ public class NetWatchDog extends LiveData<Integer> {
     /**
      * 静态方法获取是否有网络连接
      *
-     * @param context 上下文
      * @return 是否连接
      */
     public static boolean hasNet(Context context) {
         //获取手机的连接服务管理器，这里是连接管理器类
-        ConnectivityManager cm = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) Utils.getApp().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo wifiNetworkInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         NetworkInfo mobileNetworkInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
@@ -183,15 +190,51 @@ public class NetWatchDog extends LiveData<Integer> {
         return true;
     }
 
+    public int getNetWorkType() {
+        int netWorkType = NetState.NOCONTECTED;
+        try {
+            //获取手机的连接服务管理器，这里是连接管理器类
+            ConnectivityManager cm = (ConnectivityManager) Utils.getApp().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo wifiNetworkInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            NetworkInfo mobileNetworkInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            NetworkInfo.State wifiState = NetworkInfo.State.UNKNOWN;
+            NetworkInfo.State mobileState = NetworkInfo.State.UNKNOWN;
+
+            if (wifiNetworkInfo != null) {
+                wifiState = wifiNetworkInfo.getState();
+            }
+            if (mobileNetworkInfo != null) {
+                mobileState = mobileNetworkInfo.getState();
+            }
+
+            if (NetworkInfo.State.CONNECTED != wifiState && NetworkInfo.State.CONNECTED == mobileState) {
+                LogUtil.d("VideoNetWatchdog", "onWifiTo4G()");
+                netWorkType = NetState.MOBILE;
+            } else if (NetworkInfo.State.CONNECTED == wifiState && NetworkInfo.State.CONNECTED != mobileState) {
+                LogUtil.d("VideoNetWatchdog", "on4GToWifi()");
+                netWorkType = NetState.WIFI;
+            } else if (NetworkInfo.State.CONNECTED != wifiState && NetworkInfo.State.CONNECTED != mobileState) {
+                LogUtil.d("VideoNetWatchdog", "onNetDisconnected()");
+                netWorkType = NetState.NOCONTECTED;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.currentNetState = netWorkType;
+            return netWorkType;
+        }
+    }
+
     /**
      * 静态判断是不是4G网络
      *
-     * @param context 上下文
      * @return 是否是4G
      */
-    public static boolean is4GConnected(Context context) {
+    public static boolean is4GConnected() {
         //获取手机的连接服务管理器，这里是连接管理器类
-        ConnectivityManager cm = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) Utils.getApp().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo mobileNetworkInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
